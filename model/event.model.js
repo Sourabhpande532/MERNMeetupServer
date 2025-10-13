@@ -31,7 +31,7 @@ const EventSchema = new mongoose.Schema( {
     type: {
         type: String,
         enum: ["Online", "Offline"],
-        default: Offline
+        default: "Offline"
     },
     startAt: {
         type: Date,
@@ -58,7 +58,6 @@ const EventSchema = new mongoose.Schema( {
     description: String,
     venue: VenueSchema, // only for relevant for offline events
     speakers: [SpeakerSchema],
-    capacity: Number,
     requiresTicket: {
         type: Boolean,
         default: false
