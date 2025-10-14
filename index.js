@@ -76,7 +76,7 @@ app.get( "/eventList", async ( req, res ) => {
 
 async function readEventByTitle( eventTitle ) {
     try {
-        const titleByEvents = await NewEvents.findOne( { title: { $regex: new RegExp( `${ eventTitle }$`, "i" ) }, //i-case-insensitive
+        const titleByEvents = await NewEvents.find( { title: { $regex: new RegExp( `${ eventTitle }$`, "i" ) }, //i-case-insensitive
      });
         console.log( "Event Get by title Done!" );
         return titleByEvents
