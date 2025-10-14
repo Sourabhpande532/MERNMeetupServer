@@ -76,8 +76,9 @@ app.get( "/eventList", async ( req, res ) => {
 
 async function readEventByTitle( eventTitle ) {
     try {
-        const titleByEvents = await NewEvents.find( { title: { $regex: new RegExp( `${ eventTitle }$`, "i" ) }, //i-case-insensitive
-     });
+        const titleByEvents = await NewEvents.find( {
+            title: { $regex: new RegExp( `${ eventTitle }$`, "i" ) }, //i-case-insensitive
+        } );
         console.log( "Event Get by title Done!" );
         return titleByEvents
     } catch ( error ) {
@@ -139,6 +140,26 @@ async function addImageUrlToSpeakers() {
 }
 // addImageUrlToSpeakers()
 
+async function getEventByTags( tagEvent ) {
+    try {
+        const event = await NewEvents.find( { tags: { $regex: new RegExp( `${ tagEvent }$`, "i" ) } } );
+        console.log( "Event get by tag done!" );
+        return event
+    } catch ( error ) {
+        console.error( "Failed to get events by tags", error.message );
+        throw error
+    }
+}
+
+app.get( "/events/tag/:tagName", async ( req, res ) => {
+    try {
+        const eventByTag = await getEventByTags( req.params.tagName );
+        eventByTag.length != 0 ? res.status( 200 ).json( eventByTag ) : res.status( 404 ).json( { success: false, message: "Event not found by tag" } )
+    } catch ( error ) {
+        console.error( "Server error,fetching event by tag", error.message );
+        res.status( 500 ).json( { success: false, message: "Internal server error", err: error.message } )
+    }
+} )
 
 
 const PORT = process.env.PORT || 4000;
