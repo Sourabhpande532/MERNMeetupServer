@@ -6,7 +6,7 @@ function randomDate( start, end ) {
 const SpeakerSchema = new mongoose.Schema( {
     name: { type: String, required: true },
     role: String,
-    photoUrl: String
+    imgUrl: String
 } )
 
 const VenueSchema = new mongoose.Schema( {
@@ -62,7 +62,6 @@ const EventSchema = new mongoose.Schema( {
         type: Boolean,
         default: false
     },
-    createdBy: String,
     dressCode: { type: String, default: "Casual" },
     ageRestrication: {
         type: String,

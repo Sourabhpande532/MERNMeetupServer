@@ -52,7 +52,7 @@ app.post( "/events", async ( req, res ) => {
 async function getAllEvents() {
     try {
         const allEvents = await NewEvents.find()
-        console.log( "Fetch successfully all events!");
+        console.log( "Fetch successfully all events!" );
         return allEvents;
     } catch ( error ) {
         console.error( "Failed to get events.", error.message )
@@ -76,7 +76,8 @@ app.get( "/eventList", async ( req, res ) => {
 
 async function readEventByTitle( eventTitle ) {
     try {
-        const titleByEvents = await NewEvents.find( { title: eventTitle } );
+        const titleByEvents = await NewEvents.find( { title: { $regex: new RegExp( `${ eventTitle }$`, "i" ) }, //i-case-insensitive
+     });
         console.log( "Event Get by title Done!" );
         return titleByEvents
     } catch ( error ) {
@@ -122,6 +123,22 @@ app.get( "/events/:eventMode", async ( req, res ) => {
         res.status( 500 ).json( { err: error, message: 'Server error, prefer mode either online/offline' } )
     }
 } )
+
+async function addImageUrlToSpeakers() {
+    try {
+        const result = await NewEvents.updateMany(
+            { "speakers.imgUrl": { $exists: false } },
+            { $set: { "speakers.$[].imgUrl": "https://placehold.co/150" } }
+        );
+        console.log( "Done!", result.modifiedCount );
+
+    } catch ( error ) {
+        console.error( "Error Updating speakers:", error.message );
+
+    }
+}
+// addImageUrlToSpeakers()
+
 
 const PORT = process.env.PORT || 4000;
 app.listen( PORT, () => {
