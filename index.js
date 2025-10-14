@@ -76,7 +76,7 @@ app.get( "/eventList", async ( req, res ) => {
 
 async function readEventByTitle( eventTitle ) {
     try {
-        const titleByEvents = await NewEvents.find( { title: { $regex: new RegExp( `${ eventTitle }$`, "i" ) }, //i-case-insensitive
+        const titleByEvents = await NewEvents.findOne( { title: { $regex: new RegExp( `${ eventTitle }$`, "i" ) }, //i-case-insensitive
      });
         console.log( "Event Get by title Done!" );
         return titleByEvents
@@ -139,34 +139,6 @@ async function addImageUrlToSpeakers() {
 }
 // addImageUrlToSpeakers()
 
-// ✅ Fetch single event by ID
-async function readEventById(eventId) {
-  try {
-    const singleEvent = await NewEvents.findById(eventId);
-    console.log("✅ Event fetched by ID:", eventId);
-    return singleEvent;
-  } catch (error) {
-    console.error("❌ Failed to get event by ID:", error.message);
-    throw error;
-  }
-}
-// ✅ API route to get one event by its ID
-app.get("/event/:id", async (req, res) => {
-  try {
-    const event = await readEventById(req.params.id);
-    if (event) {
-      res.status(200).json(event);
-    } else {
-      res.status(404).json({ success: false, message: "Event not found." });
-    }
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Server internal error",
-      error: error.message,
-    });
-  }
-});
 
 
 const PORT = process.env.PORT || 4000;
