@@ -77,7 +77,7 @@ app.get( "/eventList", async ( req, res ) => {
 async function readEventByTitle( eventTitle ) {
     try {
         const titleByEvents = await NewEvents.find( {
-            title: { $regex: new RegExp( eventTitle , "i" ) }, //i-case-insensitive
+            title: { $regex: new RegExp( eventTitle, "i" ) }, //i-case-insensitive
         } );
         console.log( "Event Get by title Done!" );
         return titleByEvents
@@ -160,6 +160,22 @@ app.get( "/events/tag/:tagName", async ( req, res ) => {
         res.status( 500 ).json( { success: false, message: "Internal server error", err: error.message } )
     }
 } )
+
+async function getEventById( id ) {
+    try {
+        const eventById = await NewEvents.findByIdAndUpdate( id );
+        console.log( "Successfully done by Id:" );
+        return eventById
+    } catch ( error ) {
+        console.error( "Error due to unable to fetch details by id", error.message );
+        throw error
+    }
+}
+app.get( "/events/details/:id", async ( req, res ) => {
+    const event = await getEventById( req.params.id )
+    res.json( event );
+} );
+
 
 
 const PORT = process.env.PORT || 4000;
