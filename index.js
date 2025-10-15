@@ -176,7 +176,20 @@ app.get( "/events/details/:id", async ( req, res ) => {
     res.json( event );
 } );
 
+app.get("/events/search/:query", async (req, res) => {
+  try {
+    const { query } = req.params;
+    const regex = new RegExp(query, "i"); // case-insensitive
 
+    const events = await NewEvents.find({
+      $or: [{ title: regex }, { tags: regex }]
+    });
+
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ error: "Search failed" });
+  }
+});
 
 const PORT = process.env.PORT || 4000;
 app.listen( PORT, () => {
